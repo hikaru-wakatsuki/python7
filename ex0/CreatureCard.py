@@ -1,5 +1,6 @@
 from ex0.Card import Card
 from enum import Enum
+from typing import Any
 
 
 class CreatureCard(Card, Enum):
@@ -12,3 +13,8 @@ class CreatureCard(Card, Enum):
     def play(self, game_state: dict) -> dict:
 
     def attack_target(self, target) -> dict:
+
+    def get_card_info(self) -> dict:
+        info: dict[str, Any] = super().get_card_info()
+        info['type'] = 'Creature'
+        info['atta']
