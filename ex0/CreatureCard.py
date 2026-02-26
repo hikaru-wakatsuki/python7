@@ -14,11 +14,12 @@ class CreatureCard(Card):
         self.health: int = health
 
     def play(self, game_state: dict) -> dict:
-        return {
+        game_state.update({
             'card_player': self.name,
             'mana_used': self.cost,
-            'effect': game_state.values
-            }
+            'effect': 'Creature summoned to battlefield'
+            })
+        return game_state
 
     def attack_target(self, target: "CreatureCard") -> dict:
         combat_resolved: bool
