@@ -1,11 +1,26 @@
 from abc import ABC, abstractmethod
+from enum import Enum
+
+
+class Rarity(Enum):
+    COMMON = 'Common'
+    RARE = "Rare"
+    EPIC = "Epic"
+    LEGENDARY = "Legendary"
 
 
 class Card(ABC):
     def __init__(self,  name: str, cost: int, rarity: str) -> None:
+        if not name or not name.strip():
+            raise ValueError("Card name must be a non-empty string.")
         self.name: str = name
+        if cost < 0:
+            raise ValueError("Cost must be non-negative.")
         self.cost: int = cost
-        self.rarity: str = rarity
+        try:
+            self.rarity: Rarity = Rarity(rarity)
+        except ValueError:
+            raise ValueError(f"Invalid rarity: {rarity}")
 
     @abstractmethod
     def play(self, game_state: dict) -> dict:
@@ -15,7 +30,7 @@ class Card(ABC):
         return {
             'name': self.name,
             'cost': self.cost,
-            'rarity': self.rarity
+            'rarity': self.rarity.value
         }
 
     def is_playable(self, available_mana: int) -> bool:
