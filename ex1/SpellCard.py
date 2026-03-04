@@ -3,7 +3,7 @@ from enum import Enum
 
 
 class EffectType(Enum):
-    DAMEGE = 'damege'
+    DAMAGE = 'damage'
     HEAL = 'heal'
     BUFF = 'buff'
     DEBUFF = 'debuff'
@@ -19,31 +19,31 @@ class SpellCard(Card):
             raise ValueError()
 
     def play(self, game_state: dict) -> dict:
-        game_state.update({
+        targets: list[CreatureCard] = game_state.get('targets', [])
+        result: dict[str, str] = self.resolve_effect(targets)
+        return {
             'card_played': self.name,
             'mana_used': self.cost,
-            'effect': f'Deal {self.cost} {self.effect_type.value()} to target'
-        })
-        return game_state
+            'effect': result.get('description')
+        }
 
-    def resolve_effect(
-            self, targets: list[CreatureCard]
-            ) -> dict[CreatureCard, bool]:
-        is_alive: bool = True
-        result: dict[CreatureCard, bool] = {}
+    def resolve_effect(self, targets: list) -> dict:
+        description: str
         for target in targets:
-            if self.effect_type.value() == 'damege':
+            if self.effect_type == EffectType.DAMAGE:
                 target.health -= self.cost
                 if target.health < 0:
                     target.health = 0
-                    is_alive = False
-            if self.effect_type.value() == 'heal':
+                description = f'Deal {self.cost} damage to target'
+            elif self.effect_type == EffectType.HEAL:
                 target.health += self.cost
-            if self.effect_type.value() == 'buff':
+                description = f'Heal {self.cost} health'
+            elif self.effect_type == EffectType.BUFF:
                 target.attack += self.cost
-            if self.effect_type.value() == 'debuff':
+                description = f'Increase attack by {self.cost}'
+            elif self.effect_type == EffectType.DEBUFF:
                 target.attack -= self.cost
                 if target.attack < 0:
                     target.attack = 0
-            result.update({target: is_alive})
-        return result
+                description = f'Decrease attack by {self.cost}'
+        return {'description': description}
