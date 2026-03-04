@@ -1,4 +1,4 @@
-from ex0.CreatureCard import CreatureCard
+from ex0 import CreatureCard
 from typing import Dict, Any
 
 

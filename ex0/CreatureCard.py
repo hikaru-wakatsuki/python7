@@ -1,5 +1,5 @@
-from ex0.Card import Card
-from typing import Any
+from ex0 import Card
+from typing import Any, Dict
 
 
 class CreatureCard(Card):
@@ -35,7 +35,7 @@ class CreatureCard(Card):
             }
 
     def get_card_info(self) -> dict:
-        info: dict[str, Any] = super().get_card_info()
+        info: Dict[str, Any] = super().get_card_info()
         info.update({
             'type': 'Creature',
             'attack': self.attack,
