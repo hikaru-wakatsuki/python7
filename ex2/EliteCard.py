@@ -64,10 +64,31 @@ class EliteCard(Card, Combatable, Magical):
         }
 
     def cast_spell(self, spell_name: str, targets: list) -> dict:
-        mana
+        mana_used: int = min(self.mana, len(targets) * 2)
+        for target in targets:
+            if not hasattr(target, 'health'):
+                raise TypeError("Target must have a 'health' attribute")
+            target.health -= self.cost
+            if target.health < 0:
+                target.health = 0
+            self.mana -= mana_used
+            return {
+                "caster": self.name,
+                "spell": spell_name,
+                "targets": [t.name for t in targets],
+                "mana_used": mana_used
+            }
 
     def channel_mana(self, amount: int) -> dict:
-        pass
+        if amount < 0:
+            raise ValueError("Amount must be non-negative.")
+
+        self.mana += amount
+
+        return {
+            "channeled": amount,
+            "total_mana": self.mana
+        }
 
     def get_magic_stats(self) -> dict:
         return {
