@@ -14,7 +14,7 @@ class CreatureCard(Card):
         self.health: int = health
 
     def play(self, game_state: dict) -> dict:
-        field_creatures: list["CreatureCard"] | None
+        field_creatures: list[Card]
         field_creatures = game_state.get('field_creatures')
         field_creatures.append(self)
         return {
@@ -23,7 +23,12 @@ class CreatureCard(Card):
             'effect': 'Creature summoned to battlefield'
             }
 
-    def attack_target(self, target: "CreatureCard") -> dict:
+    def attack_target(self, target) -> dict:
+        if not hasattr(target, 'health'):
+            raise TypeError("Target must have a 'health' attribute")
+        target.health -= self.attack
+        if target.health < 0:
+            target.health = 0
         return {
             'attacker': self.name,
             'target': target.name,
