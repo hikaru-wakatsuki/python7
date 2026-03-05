@@ -13,7 +13,7 @@ class EliteCard(Card, Combatable, Magical):
             raise ValueError("Health must be positive integers.")
         if mana <= 0:
             raise ValueError("Mana must be positive integers.")
-        self.attack: int = attack
+        self.attack_power: int = attack
         self.health: int = health
         self.mana: int = mana
 
@@ -33,13 +33,13 @@ class EliteCard(Card, Combatable, Magical):
     def attack(self, target) -> dict:
         if not hasattr(target, 'health'):
             raise TypeError("Target must have a 'health' attribute")
-        target.health -= self.attack
+        target.health -= self.attack_power
         if target.health < 0:
             target.health = 0
         return {
             'attacker': self.name,
             'target': target.name,
-            'damage': self.attack,
+            'damage': self.attack_power,
             'combat_type': 'melee'
         }
 
@@ -59,7 +59,7 @@ class EliteCard(Card, Combatable, Magical):
 
     def get_combat_stats(self) -> dict:
         return {
-            "attack": self.attack,
+            "attack": self.attack_power,
             "health": self.health
         }
 
