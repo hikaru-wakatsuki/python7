@@ -1,5 +1,6 @@
-from ex0 import Card, CreatureCard
+from ex0.Card import Card
 from enum import Enum
+from typing import Any
 
 
 class Effect(Enum):
@@ -18,27 +19,27 @@ class ArtifactCard(Card):
         try:
             self.effect: Effect = Effect(effect)
         except ValueError:
-            raise ValueError()
+            raise ValueError("Invalid effect type")
 
     def play(self, game_state: dict) -> dict:
-        targets: list[CreatureCard] = game_state.get('targets', [])
-        result: dict[str, str] = self.resolve_effect(targets)
+        result: dict[str, Any] = self.activate_ability()
+        game_state.update(result)
         return {
             'card_played': self.name,
             'mana_used': self.cost,
-            'effect': f'Permanent: +1 mana per turn'
+            'effect': result.get('description')
         }
 
     def activate_ability(self) -> dict:
         if self.durability <= 0:
             return {
                 'active': False,
-                'effect': self.effect,
+                'effect': self.effect.value,
                 'description': 'ArtifactCard is destroyed'
             }
         self.durability -= 1
         return {
             'active': True,
-            'effect': self.effect,
+            'effect': self.effect.value,
             'description': f'Permanent: +1 {self.effect.value} per turn'
         }

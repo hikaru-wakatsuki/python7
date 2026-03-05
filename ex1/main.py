@@ -11,3 +11,6 @@ def main() -> None:
     print("Drawing and playing cards:")
     print()
     print()
+
+
+KeyError, IndexError, TypeError, ValueError

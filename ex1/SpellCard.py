@@ -1,4 +1,5 @@
-from ex0 import Card, CreatureCard
+from ex0.Card import Card
+from ex0.CreatureCard import CreatureCard
 from enum import Enum
 
 

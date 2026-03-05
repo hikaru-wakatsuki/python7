@@ -1,5 +1,5 @@
-from .CreatureCard import CreatureCard
-from .Card import Card, Rarity
+from ex0.CreatureCard import CreatureCard
+from ex0.Card import Card, Rarity
 
 
 __all__ = [
