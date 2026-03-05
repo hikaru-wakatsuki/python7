@@ -1,6 +1,7 @@
 from ex0.Card import Card
 from ex0.CreatureCard import CreatureCard
 from enum import Enum
+from typing import Any
 
 
 class EffectType(Enum):
@@ -20,8 +21,8 @@ class SpellCard(Card):
             raise ValueError()
 
     def play(self, game_state: dict) -> dict:
-        targets: list[CreatureCard] = game_state.get('targets', [])
-        result: dict[str, str] = self.resolve_effect(targets)
+        targets: list[CreatureCard] = game_state.get('field_creatures', [])
+        result: dict[str, Any] = self.resolve_effect(targets)
         return {
             'card_played': self.name,
             'mana_used': self.cost,
@@ -29,6 +30,8 @@ class SpellCard(Card):
         }
 
     def resolve_effect(self, targets: list) -> dict:
+        if not targets:
+            return {'description': f'{self.name} has no target'}
         description: str
         for target in targets:
             if self.effect_type == EffectType.DAMAGE:

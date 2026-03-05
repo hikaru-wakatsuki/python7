@@ -1,4 +1,9 @@
-from ex1 import SpellCard
+from ex0.Card import Card
+from ex0.CreatureCard import CreatureCard
+from ex1.SpellCard import SpellCard
+from ex1.ArtifactCard import ArtifactCard
+from ex1.Deck import Deck
+from typing import Any
 
 
 def main() -> None:
@@ -6,11 +11,32 @@ def main() -> None:
     print("=== DataDeck Deck Builder ===")
     print()
     print("Building deck with different card types...")
-    print(f"Deck stats: ")
+    try:
+        deck: Deck = Deck()
+        deck.add_card(SpellCard('Lightning Bolt', 3, 'Rare', 'damage'))
+        deck.add_card(ArtifactCard('Mana Crystal', 4, 'Common', 2, 'mana'))
+        deck.add_card(CreatureCard('Fire Dragon', 5, 'Legendary', 7, 5))
+        print(f"Deck stats: {deck.get_deck_stats()}")
+        print()
+        print("Drawing and playing cards:")
+        game_state: dict[str, Any] = {'field_creatures': []}
+        print()
+        print("Draw: Lightning Bolt (Spell)")
+        first_draw: Card = deck.draw_card()
+        print(f"Play result: {first_draw.play(game_state)}")
+        print()
+        print("Draw: Mana Crystal (Artifact)")
+        second_draw: Card = deck.draw_card()
+        print(f"Play result: {second_draw.play(game_state)}")
+        print()
+        print("Drew: Fire Dragon (Creature)")
+        third_draw: Card = deck.draw_card()
+        print(f"Play result: {third_draw.play(game_state)}")
+    except (KeyError, IndexError, TypeError, ValueError) as error:
+        print(error)
     print()
-    print("Drawing and playing cards:")
-    print()
-    print()
+    print("Polymorphism in action: Same interface, different card behaviors!")
 
 
-KeyError, IndexError, TypeError, ValueError
+if __name__ == "__main__":
+    main()

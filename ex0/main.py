@@ -1,5 +1,5 @@
-from ex0 import CreatureCard
-from typing import Dict, Any
+from ex0.CreatureCard import CreatureCard
+from typing import Any
 
 
 def main() -> None:
@@ -16,7 +16,7 @@ def main() -> None:
         print()
         print("Playing Fire Dragon with 6 mana available:")
         print(f"Playable: {red_dragon.is_playable(6)}")
-        game_state: Dict[str, Any] = {}
+        game_state: dict[str, Any] = {'field_creatures': []}
         print(f"Play result: {red_dragon.play(game_state)}")
         print("Fire Dragon attacks Goblin Warrior:")
         goblin_warrior: CreatureCard
