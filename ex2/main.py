@@ -32,3 +32,7 @@ def main() -> None:
     print(f"Mana channel: {arcane_warrior.channel_mana(3)}")
     print()
     print("Multiple interface implementation successful!")
+
+
+if __name__ == "__main__":
+    main()
