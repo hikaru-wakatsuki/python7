@@ -49,5 +49,4 @@ class AggressiveStrategy(GameStrategy):
         for target in available_targets:
             if not hasattr(target, 'health'):
                 raise TypeError("Target must have a 'health' attribute")
-        available_targets.sort(key=lambda t: t.health)
-        return available_targets
+        return sorted(available_targets, key=lambda t: t.health)
