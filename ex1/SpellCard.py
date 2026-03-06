@@ -18,9 +18,11 @@ class SpellCard(Card):
         try:
             self.effect_type: EffectType = EffectType(effect_type)
         except ValueError:
-            raise ValueError()
+            raise ValueError(f"{self.name} has invalid effect type")
 
     def play(self, game_state: dict) -> dict:
+        if 'field_creatures' not in game_state:
+            raise KeyError("game_state must contain 'field_creatures'")
         targets: list[CreatureCard] = game_state.get('field_creatures', [])
         result: dict[str, Any] = self.resolve_effect(targets)
         return {

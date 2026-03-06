@@ -7,13 +7,15 @@ class CreatureCard(Card):
                  attack: int, health: int) -> None:
         super().__init__(name, cost, rarity)
         if attack <= 0:
-            raise ValueError("Attack must be positive integers.")
+            raise ValueError(f"{self.name} attack must be a positive integer.")
         if health <= 0:
-            raise ValueError("Health must be positive integers.")
+            raise ValueError(f"{self.name} health must be a positive integer.")
         self.attack: int = attack
         self.health: int = health
 
     def play(self, game_state: dict) -> dict:
+        if 'field_creatures' not in game_state:
+            raise KeyError("game_state must contain 'field_creatures'")
         field_creatures: list[Card]
         field_creatures = game_state.get('field_creatures')
         field_creatures.append(self)

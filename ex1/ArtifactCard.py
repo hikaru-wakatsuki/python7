@@ -14,12 +14,13 @@ class ArtifactCard(Card):
                  durability: int, effect: str) -> None:
         super().__init__(name, cost, rarity)
         if durability <= 0:
-            raise ValueError("Durability must be positive integers.")
+            raise ValueError(
+                f"{self.name} durability must be a positive integer.")
         self.durability: int = durability
         try:
             self.effect: Effect = Effect(effect)
         except ValueError:
-            raise ValueError("Invalid effect type")
+            raise ValueError(f"{self.name} has invalid effect")
 
     def play(self, game_state: dict) -> dict:
         result: dict[str, Any] = self.activate_ability()
