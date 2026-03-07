@@ -1,10 +1,12 @@
 from random import choice
 from ex4.TournamentCard import TournamentCard
 
+
 class TournamentPlatform:
     def __init__(self):
         self.cards: dict[str, TournamentCard] = {}
         self.matches_played: int = 0
+
     def register_card(self, card: TournamentCard) -> str:
         self.cards[card.card_id] = card
         return card.card_id
