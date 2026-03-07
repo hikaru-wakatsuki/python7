@@ -1,0 +1,45 @@
+from random import choice
+from ex4.TournamentCard import TournamentCard
+
+class TournamentPlatform:
+    def __init__(self):
+        self.cards: dict[str, TournamentCard] = {}
+        self.matches_played: int = 0
+    def register_card(self, card: TournamentCard) -> str:
+        self.cards[card.card_id] = card
+        return card.card_id
+
+    def create_match(self, card1_id: str, card2_id: str) -> dict:
+        card1: TournamentCard = self.cards.get(card1_id)
+        card2: TournamentCard = self.cards.get(card2_id)
+        if not card1 or not card2:
+            raise ValueError("Card not found")
+        winner: TournamentCard = choice([card1, card2])
+        loser: TournamentCard = card2 if winner == card1 else card1
+        winner.update_wins(1)
+        loser.update_losses(1)
+        self.matches_played += 1
+        return {
+            "winner": winner.card_id,
+            "loser": loser.card_id,
+            "winner_rating": winner.rating,
+            "loser_rating": loser.rating
+        }
+
+    def get_leaderboard(self) -> list:
+        leaderboard = sorted(
+            self.cards.values(),
+            key=lambda c: c.rating,
+            reverse=True
+        )
+        return leaderboard
+
+    def generate_tournament_report(self) -> dict:
+        total_cards = len(self.cards)
+        avg_rating = sum(card.rating for card in self.cards.values()) // total_cards
+        return {
+            "total_cards": total_cards,
+            "matches_played": self.matches_played,
+            "avg_rating": avg_rating,
+            "platform_status": "active"
+        }
