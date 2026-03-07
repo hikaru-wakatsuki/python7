@@ -1,48 +1,46 @@
 from ex4.TournamentCard import TournamentCard
 from ex4.TournamentPlatform import TournamentPlatform
+from typing import Any
 
 
 def main():
-
+    print()
     print("=== DataDeck Tournament Platform ===")
-
-    platform = TournamentPlatform()
-
+    print()
     print("Registering Tournament Cards...")
-
-    dragon = TournamentCard("Fire Dragon", 5, 6, 10, "dragon_001")
-    wizard = TournamentCard("Ice Wizard", 4, 4, 8, "wizard_001")
-
+    platform: TournamentPlatform = TournamentPlatform()
+    print()
+    dragon: TournamentCard = TournamentCard(
+        'Fire Dragon', 5, 'Legendary', 7, 5, 'dragon_001', 1200)
     platform.register_card(dragon)
+    print(f"{dragon.name} (ID: {dragon.card_id}):")
+    print("- Interfaces: [Card, Combatable, Rankable]")
+    print(f"- Rating: {dragon.rating}")
+    print(f"- Record: {dragon.get_tournament_stats().get('record')}")
+    print()
+    wizard: TournamentCard = TournamentCard(
+        'Ice Wizard', 4, 'Epic', 4, 4, 'wizard_001', 1150)
     platform.register_card(wizard)
-
-    print("Fire Dragon (ID: dragon_001):")
+    print(f"{wizard.name} (ID: {wizard.card_id}):")
     print("- Interfaces: [Card, Combatable, Rankable]")
-    print("- Rating:", dragon.rating)
-    print("- Record: 0-0")
-
-    print("Ice Wizard (ID: wizard_001):")
-    print("- Interfaces: [Card, Combatable, Rankable]")
-    print("- Rating:", wizard.rating)
-    print("- Record: 0-0")
-
+    print(f"- Rating: {wizard.rating}")
+    print(f"- Record: {wizard.get_tournament_stats().get('record')}")
+    print()
     print("Creating tournament match...")
-
-    result = platform.create_match("dragon_001", "wizard_001")
-
-    print("Match result:", result)
-
+    result: dict[str, Any] = platform.create_match("dragon_001", "wizard_001")
+    print(f"Match result: {result}")
+    print()
     print("Tournament Leaderboard:")
-
-    leaderboard = platform.get_leaderboard()
-
-    for i, card in enumerate(leaderboard, 1):
-        print(f"{i}. {card.name} - Rating: {card.rating} ({card.wins}-{card.losses})")
-
+    leaderboard: list[TournamentCard] = platform.get_leaderboard()
+    i: int = 1
+    for card in leaderboard:
+        print(f"{i}. {card.name} - Rating: {card.rating} "
+              f"({card.get_tournament_stats().get('record')})")
+        i += 1
+    print()
     print("Platform Report:")
-
     print(platform.generate_tournament_report())
-
+    print()
     print("=== Tournament Platform Successfully Deployed! ===")
     print("All abstract patterns working together harmoniously!")
 
