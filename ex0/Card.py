@@ -12,15 +12,16 @@ class Rarity(Enum):
 class Card(ABC):
     def __init__(self,  name: str, cost: int, rarity: str) -> None:
         if not name or not name.strip():
-            raise ValueError("Card name must be a non-empty string.")
+            raise ValueError(
+                f"{self.name} card name must be a non-empty string.")
         self.name: str = name
         if cost < 0:
-            raise ValueError("Cost must be non-negative.")
+            raise ValueError(f"{self.name} cost must be non-negative.")
         self.cost: int = cost
         try:
             self.rarity: Rarity = Rarity(rarity)
         except ValueError:
-            raise ValueError(f"Invalid rarity: {rarity}")
+            raise ValueError(f"{self.name} invalid rarity: {rarity}")
 
     @abstractmethod
     def play(self, game_state: dict) -> dict:
