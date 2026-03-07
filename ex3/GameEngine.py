@@ -15,8 +15,8 @@ class GameEngine:
 
     def configure_engine(
             self, factory: CardFactory, strategy: GameStrategy) -> None:
-        self.factory = CardFactory
-        self.strategy = GameStrategy
+        self.factory = factory
+        self.strategy = strategy
 
     def simulate_turn(self) -> dict:
         if not self.factory or not self.strategy:
@@ -37,7 +37,7 @@ class GameEngine:
     def get_engine_status(self) -> dict:
         strategy_name: str = (
             self.strategy.get_strategy_name()
-            if not self.self.strategy else "None")
+            if self.strategy else "None")
         return {
             "turns_simulated": self.turns_simulated,
             "strategy_used": strategy_name,

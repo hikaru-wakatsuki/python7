@@ -18,7 +18,7 @@ class FantasyCardFactory(CardFactory):
 
     def create_spell(self, name_or_power: str | int | None = None) -> Card:
         if name_or_power == 'fire':
-            return SpellCard("Fireball", 4, "Rare", "damage")
+            return SpellCard("Fire ball", 4, "Rare", "damage")
         elif name_or_power == 'ice':
             return SpellCard("Ice Shard", 3, "Rare", "debuff")
         elif name_or_power == 'lightning':
