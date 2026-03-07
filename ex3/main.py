@@ -31,7 +31,8 @@ def main() -> None:
         print()
         print("Abstract Factory + Strategy Pattern: "
               "Maximum flexibility achieved!")
-    except Exception as error:
+    except (KeyError, IndexError, TypeError,
+            ValueError, RuntimeError) as error:
         print(error)
 
 
