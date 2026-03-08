@@ -23,8 +23,22 @@ class ArtifactCard(Card):
             raise ValueError(f"{self.name} has invalid effect")
 
     def play(self, game_state: dict) -> dict:
+        if 'field_creatures' not in game_state:
+            raise KeyError("game_state must contain 'field_creatures'")
+        field_creatures: list[Card]
+        field_creatures = game_state.get('field_creatures')
         result: dict[str, Any] = self.activate_ability()
-        game_state.update(result)
+        if result.get('active'):
+            for card in field_creatures:
+                if self.effect == Effect.MANA:
+                    if hasattr(card, 'mana'):
+                        card.mana += 1
+                elif self.effect == Effect.ATTACK:
+                    if hasattr(card, 'attack'):
+                        card.attack += 1
+                else:
+                    if hasattr(card, 'health'):
+                        card.health += 1
         return {
             'card_played': self.name,
             'mana_used': self.cost,
