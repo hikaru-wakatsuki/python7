@@ -16,6 +16,8 @@ class TournamentPlatform:
         card2: TournamentCard = self.cards.get(card2_id)
         if not card1 or not card2:
             raise ValueError("Card not found")
+        card1_health_backup: int = card1.get_combat_stats()["health"]
+        card2_health_backup: int = card2.get_combat_stats()["health"]
         winner: TournamentCard
         while True:
             first: TournamentCard
@@ -25,7 +27,7 @@ class TournamentPlatform:
             elif card1.cost > card2.cost:
                 first = card2
             else:
-                choice([card1, card2])
+                first = choice([card1, card2])
             second = (card2 if first == card1 else card1)
             first.attack(second)
             if second.health == 0:
@@ -35,7 +37,9 @@ class TournamentPlatform:
             if first.health == 0:
                 winner = second
                 break
-        loser: TournamentCard = card2 if winner == card1 else card1
+        loser: TournamentCard = first if winner == second else second
+        card1.health = card1_health_backup
+        card2.health = card2_health_backup
         winner.update_wins(1)
         loser.update_losses(1)
         self.matches_played += 1
@@ -54,8 +58,9 @@ class TournamentPlatform:
 
     def generate_tournament_report(self) -> dict:
         total_cards: int = len(self.cards)
-        avg_rating: float = sum(
-            card.rating for card in self.cards.values()) // total_cards
+        avg_rating: float = (
+            sum(card.rating for card in self.cards.values())
+            // total_cards if total_cards else 0)
         return {
             "total_cards": total_cards,
             "matches_played": self.matches_played,
