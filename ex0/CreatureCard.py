@@ -1,5 +1,5 @@
 from ex0.Card import Card
-from typing import Any, Dict
+from typing import Any
 
 
 class CreatureCard(Card):
@@ -18,6 +18,8 @@ class CreatureCard(Card):
             raise KeyError("game_state must contain 'field_creatures'")
         field_creatures: list[Card]
         field_creatures = game_state.get('field_creatures')
+        if not isinstance(field_creatures, list):
+            raise TypeError("game_state['field_creatures'] must be a list")
         field_creatures.append(self)
         return {
             'card_played': self.name,
@@ -26,8 +28,11 @@ class CreatureCard(Card):
             }
 
     def attack_target(self, target) -> dict:
+        if not isinstance(target, Card):
+            raise TypeError(f"{self.name} target must be a Card")
         if not hasattr(target, 'health'):
-            raise TypeError("Target must have a 'health' attribute")
+            raise TypeError(f"{self.name} target must have a "
+                            f"'health' attribute")
         target.health -= self.attack
         if target.health < 0:
             target.health = 0
@@ -39,7 +44,7 @@ class CreatureCard(Card):
             }
 
     def get_card_info(self) -> dict:
-        info: Dict[str, Any] = super().get_card_info()
+        info: dict[str, Any] = super().get_card_info()
         info.update({
             'type': 'Creature',
             'attack': self.attack,

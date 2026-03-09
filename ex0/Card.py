@@ -13,7 +13,7 @@ class Card(ABC):
     def __init__(self,  name: str, cost: int, rarity: str) -> None:
         if not name or not name.strip():
             raise ValueError(
-                f"{self.name} card name must be a non-empty string.")
+                f"{name} card name must be a non-empty string.")
         self.name: str = name
         if cost < 0:
             raise ValueError(f"{self.name} cost must be non-negative.")

@@ -23,7 +23,9 @@ class SpellCard(Card):
     def play(self, game_state: dict) -> dict:
         if 'field_creatures' not in game_state:
             raise KeyError("game_state must contain 'field_creatures'")
-        targets: list[CreatureCard] = game_state.get('field_creatures', [])
+        targets: list[CreatureCard] = game_state.get('field_creatures')
+        if not isinstance(targets, list):
+            raise TypeError("game_state['field_creatures'] must be a list")
         result: dict[str, Any] = self.resolve_effect(targets)
         return {
             'card_played': self.name,
@@ -36,20 +38,24 @@ class SpellCard(Card):
             return {'description': f'{self.name} has no target'}
         description: str
         for target in targets:
-            if self.effect_type == EffectType.DAMAGE:
-                target.health -= self.cost
-                if target.health < 0:
-                    target.health = 0
-                description = f'Deal {self.cost} damage to target'
-            elif self.effect_type == EffectType.HEAL:
-                target.health += self.cost
-                description = f'Heal {self.cost} health'
-            elif self.effect_type == EffectType.BUFF:
-                target.attack += self.cost
-                description = f'Increase attack by {self.cost}'
-            elif self.effect_type == EffectType.DEBUFF:
-                target.attack -= self.cost
-                if target.attack < 0:
-                    target.attack = 0
-                description = f'Decrease attack by {self.cost}'
+            if not isinstance(target, Card):
+                raise TypeError(f'{self.name} targets must be Card')
+            if hasattr(target, 'health'):
+                if self.effect_type == EffectType.DAMAGE:
+                    target.health -= self.cost
+                    if target.health < 0:
+                        target.health = 0
+                    description = f'Deal {self.cost} damage to target'
+                elif self.effect_type == EffectType.HEAL:
+                    target.health += self.cost
+                    description = f'Heal {self.cost} health'
+            if hasattr(target, 'attack'):
+                if self.effect_type == EffectType.BUFF:
+                    target.attack += self.cost
+                    description = f'Increase attack by {self.cost}'
+                elif self.effect_type == EffectType.DEBUFF:
+                    target.attack -= self.cost
+                    if target.attack < 0:
+                        target.attack = 0
+                    description = f'Decrease attack by {self.cost}'
         return {'description': description}

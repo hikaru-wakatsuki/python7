@@ -22,6 +22,8 @@ class EliteCard(Card, Combatable, Magical):
             raise KeyError("game_state must contain 'field_creatures'")
         field_creatures: list[Card]
         field_creatures = game_state.get('field_creatures')
+        if not isinstance(field_creatures, list):
+            raise TypeError("game_state['field_creatures'] must be a list")
         field_creatures.append(self)
         return {
             'card_played': self.name,
@@ -30,6 +32,8 @@ class EliteCard(Card, Combatable, Magical):
             }
 
     def attack(self, target) -> dict:
+        if not isinstance(target, Card):
+            raise TypeError(f"{self.name} target must be Card")
         if not hasattr(target, 'health'):
             raise TypeError("Target must have a 'health' attribute")
         target.health -= self.attack_power

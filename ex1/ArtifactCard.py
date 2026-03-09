@@ -27,6 +27,8 @@ class ArtifactCard(Card):
             raise KeyError("game_state must contain 'field_creatures'")
         field_creatures: list[Card]
         field_creatures = game_state.get('field_creatures')
+        if not isinstance(field_creatures, list):
+            raise TypeError("game_state['field_creatures'] must be a list")
         result: dict[str, Any] = self.activate_ability()
         if result.get('active'):
             for card in field_creatures:
