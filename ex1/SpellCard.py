@@ -36,26 +36,26 @@ class SpellCard(Card):
     def resolve_effect(self, targets: list) -> dict:
         if not targets:
             return {'description': f'{self.name} has no target'}
-        description: str
+        description: str = "No effect"
         for target in targets:
             if not isinstance(target, Card):
                 raise TypeError(f'{self.name} targets must be Card')
-            if hasattr(target, 'health'):
-                if self.effect_type == EffectType.DAMAGE:
-                    target.health -= self.cost
-                    if target.health < 0:
-                        target.health = 0
-                    description = f'Deal {self.cost} damage to target'
-                elif self.effect_type == EffectType.HEAL:
-                    target.health += self.cost
-                    description = f'Heal {self.cost} health'
-            if hasattr(target, 'attack'):
-                if self.effect_type == EffectType.BUFF:
-                    target.attack += self.cost
-                    description = f'Increase attack by {self.cost}'
-                elif self.effect_type == EffectType.DEBUFF:
-                    target.attack -= self.cost
-                    if target.attack < 0:
-                        target.attack = 0
-                    description = f'Decrease attack by {self.cost}'
+            if not hasattr(target, 'health') or not hasattr(target, 'attack'):
+                raise TypeError(f"{target.name} must have attack and health")
+            if self.effect_type == EffectType.DAMAGE:
+                target.health -= self.cost
+                if target.health < 0:
+                    target.health = 0
+                description = f'Deal {self.cost} damage to target'
+            elif self.effect_type == EffectType.HEAL:
+                target.health += self.cost
+                description = f'Heal {self.cost} health'
+            elif self.effect_type == EffectType.BUFF:
+                target.attack += self.cost
+                description = f'Increase attack by {self.cost}'
+            elif self.effect_type == EffectType.DEBUFF:
+                target.attack -= self.cost
+                if target.attack < 0:
+                    target.attack = 0
+                description = f'Decrease attack by {self.cost}'
         return {'description': description}
