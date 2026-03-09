@@ -18,8 +18,6 @@ class AggressiveStrategy(GameStrategy):
                 mana_used += card.cost
                 if hasattr(card, "attack"):
                     damage_dealt += card.attack
-                elif hasattr(card, "attack_power"):
-                    damage_dealt += card.attack_power
                 played_creature = True
             elif hasattr(card, 'effect_type'):
                 if card.effect_type == EffectType.DAMAGE:

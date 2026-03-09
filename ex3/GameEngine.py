@@ -22,14 +22,15 @@ class GameEngine:
         if not self.factory or not self.strategy:
             raise RuntimeError("GameEngine is not configured")
         try:
+            card_count_before: int = len(self.hand)
             self.hand.append(self.factory.create_creature("dragon"))
             self.hand.append(self.factory.create_creature("goblin"))
             self.hand.append(self.factory.create_spell("lightning"))
-            self.cards_created += len(self.hand)
+            self.cards_created += len(self.hand) - card_count_before
             result: dict
             result = self.strategy.execute_turn(self.hand, self.battlefield)
         except (TypeError, ValueError) as error:
-            raise RuntimeError(error)
+            raise RuntimeError("Game simulation failed") from error
         self.turns_simulated += 1
         self.total_damage += result.get("damage_dealt")
         return result
