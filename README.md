@@ -153,7 +153,7 @@ AI usage in this project:
 
 - AI was used for documentation support and README writing.
 - It was used to inspect the repository structure, summarize the implemented architecture, and produce bilingual English/Japanese explanations.
-- The README content was aligned with the code in `ex0` through `ex4`, but the implementation itself should still be reviewed manually and fully understood for peer evaluation.
+
 
 ### 日本語
 
@@ -172,7 +172,7 @@ AI usage in this project:
 
 - AI はドキュメント補助と README 作成に使用しました。
 - リポジトリ構成の確認、実装済みアーキテクチャの要約、英語と日本語の説明文作成に利用しました。
-- README の内容は `ex0` から `ex4` のコードを参照して整合させていますが、実装そのものは peer review に向けて自分で確認し、説明できる状態にしておく必要があります。
+
 
 ## Notes / 補足
 
